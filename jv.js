@@ -2,90 +2,154 @@ let canvas  = document.getElementById('canvas');
 let ctx = canvas.getContext('2d');
 
 
-ctx.beginPath();
-ctx.fillStyle = 'gray';
-ctx.fillRect(0,300,400,100);
-ctx.closePath();
+var retangulo1 = {
+    x:50,
+    y:50,
+    largura:50,
+    altura:10,
+    cor:'blue',
+    desenha: function(){
+        ctx.beginPath();
+        ctx.fillStyle = this.cor;
+        ctx.fillRect(this.x, this.y, this.largura, this.altura);
+        ctx.closePath();
+    }
+
+}
+
+retangulo1.desenha();
+
+var retangulo2 = {
+    x:150,
+    y:200,
+    largura:100,
+    altura:10,
+    cor:'red',
+    desenha: function(){
+        ctx.beginPath();
+        ctx.fillStyle = this.cor;
+        ctx.fillRect(this.x, this.y, this.largura, this.altura);
+        ctx.closePath();
+    }
+
+}
+retangulo2.desenha();
+
+let circulo = {
+    x: 100,
+    y: 200,
+    raio: 50,
+    cor: "blue",
+    desenha: function(){
+        ctx.beginPath();
+        ctx.fillStyle = this.cor;
+        ctx.arc(this.x,this.y,this.raio,0,2*Math.PI);
+        ctx.fill()
+        ctx.closePath();
+    }
+}
+
+let circulo2={
+    x: 300,
+    y: 200,
+    raio: 50,
+    cor: "yellow",
+    desenha: function(){
+        ctx.beginPath();
+        ctx.fillStyle = this.cor;
+        ctx.arc(this.x,this.y,this.raio,0,2*Math.PI);
+        ctx.fill()
+        ctx.closePath();
+}
+}
+
+let bola = {
+    x: 0,
+    y: 100,
+    raio: 50,
+    img: new Image(),
+    desenha: function(){
+        this.img.src = 'download.jfif';
+        ctx.beginPath();
+        ctx.drawImage(this.img, this.x - this.raio, this.y - this.raio, 2*this.raio , 2*this.raio);
+        ctx.closePath();
+    }
+}
+
+let altura1 =1;
+let direcao = 1;
+function animar(){
+    ctx.clearRect(0,0,400,400);
+    if (retangulo1.x == 350){
+        direcao = -1
+    }
+    if ( retangulo1.x == 0){
+        direcao = 1
+    }
+    if (retangulo2.altura == 400){
+        altura1 = -1
+    }
+    if ( retangulo2.altura == 0){
+        altura1= 1
+    }
+
+    retangulo1.x= retangulo1.x + direcao;
+    retangulo2.altura += altura1;
+    retangulo2.y -= altura1 / 2;
+    retangulo1.desenha();
+    retangulo2.desenha();
+    circulo.desenha();
+    circulo2.desenha();
+    requestAnimationFrame(animar);
+
+}
+
+animar();
 
 
-ctx.beginPath();
-ctx.lineWidth = 2;
-ctx.fillStyle = 'yellow';
-ctx.arc(300,100,50,0*Math.PI,2*Math.PI);
-ctx.fill();
-ctx.closePath();
 
-ctx.beginPath();
-ctx.fillStyle = 'brown';
-ctx.fillRect(150,200,100,100);
-ctx.closePath();
+function animacao(){
+    ctx.clearRect(0,0,400,400)
+    circulo.desenha();
+    circulo2.desenha();
+    retangulo1.desenha();
+    retangulo2.desenha();
+    bola.desenha();
+    requestAnimationFrame(animacao)
+}
+animacao();
 
-ctx.beginPath();
-ctx.fillStyle = 'cyan';
-ctx.fillRect(210,220,30,30);
-ctx.closePath();
+document.addEventListener('keydown',function(evento){
+    tecla = evento.key;
+    console.log(tecla);
+    if(tecla == 'ArrowUp')   {circulo.y = circulo.y-5}  
+    if(tecla == 'ArrowDown') {circulo.y = circulo.y+5}  
+    if(tecla == 'ArrowLeft') {circulo.x = circulo.x-5}  
+    if(tecla == 'ArrowRight'){circulo.x = circulo.x+5}  
+    if(tecla == 'w')   {circulo2.y = circulo2.y-5}  
+    if(tecla == 's') {circulo2.y = circulo2.y+5}  
+    if(tecla == 'a') {circulo2.x = circulo2.x-5}  
+    if(tecla == 'd'){circulo2.x = circulo2.x+5}  
+})
 
-ctx.beginPath();
-ctx.fillStyle = 'cyan';
-ctx.fillRect(160,220,30,30);
-ctx.closePath();
+document.addEventListener('mousemove',function(evento){
+    let rect = canvas.getBoundingClientRect();
+    let x_mouse = evento.clientX - rect.left;
+    let y_mouse = evento.clientY - rect.top;
+    console.log(x_mouse,y_mouse);
 
-ctx.beginPath();
-ctx.fillStyle = '#5d4037';
-ctx.fillRect(190,250,20,50);
-ctx.closePath();
+    if (x_mouse > 0 + bola.raio && x_mouse<400 - bola.raio && 
+        y_mouse > 0 + bola.raio && y_mouse<400 - bola.raio){
+    bola.x = x_mouse;
+    bola.y = y_mouse;
+        }
 
-ctx.beginPath();
-ctx.fillStyle = 'orange';
-ctx.moveTo(200,150);
-ctx.lineTo(250,200);
-ctx.lineTo(150,200);
-ctx.lineTo(200,150);
-ctx.fill();
-ctx.closePath();
+    else{
+        bola.x = bola.x
+        bola.y = bola.y
+    }
+})
 
-ctx.beginPath();
-ctx.fillStyle = '#5d4037';
-ctx.fillRect(60,250,20,50);
-ctx.closePath();
 
-ctx.beginPath();
-ctx.fillStyle = '#5d4037';
-ctx.fillRect(320,320,20,50);
-ctx.closePath();
 
-ctx.beginPath();
-ctx.lineWidth = 2;
-ctx.fillStyle = 'green';
-ctx.arc(70,250,30,0*Math.PI,2*Math.PI);
-ctx.fill();
-ctx.closePath();
 
-ctx.beginPath();
-ctx.lineWidth = 2;
-ctx.fillStyle = 'green';
-ctx.arc(330,310,30,0*Math.PI,2*Math.PI);
-ctx.fill();
-ctx.closePath();
-
-ctx.beginPath();
-ctx.fillStyle = '#4169E1';
-ctx.fillRect(0,300,50,100);
-ctx.closePath();
-
-ctx.beginPath();
-ctx.fillStyle = '#4169E1';
-ctx.fillRect(50,360,100,40);
-ctx.closePath();
-
-ctx.beginPath();
-ctx.fillStyle = '#4169E1';
-ctx.arc(0,300,50,0*Math.PI,2*Math.PI);
-ctx.fill();
-ctx.closePath();
-
-ctx.beginPath();
-ctx.fillStyle = '#4169E1';
-ctx.arc(150,410,50,0*Math.PI,2*Math.PI);
-ctx.fill();
-ctx.closePath();
